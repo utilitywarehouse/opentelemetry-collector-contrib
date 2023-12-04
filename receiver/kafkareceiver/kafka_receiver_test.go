@@ -30,6 +30,7 @@ import (
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/kafkaexporter"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal/testdata"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal/textutils"
+	"github.com/open-telemetry/opentelemetry-collector-contrib/internal/kafka"
 )
 
 func TestNewTracesReceiver_version_err(t *testing.T) {
@@ -55,7 +56,7 @@ func TestNewTracesReceiver_encoding_err(t *testing.T) {
 func TestNewTracesReceiver_err_auth_type(t *testing.T) {
 	c := Config{
 		ProtocolVersion: "2.0.0",
-		Authentication: kafkaexporter.Authentication{
+		Authentication: kafka.Authentication{
 			TLS: &configtls.TLSClientSetting{
 				TLSSetting: configtls.TLSSetting{
 					CAFile: "/doesnotexist",
@@ -131,8 +132,8 @@ func TestTracesReceiver_error(t *testing.T) {
 }
 
 func TestTracesConsumerGroupHandler(t *testing.T) {
-	view.Unregister(MetricViews()...)
-	views := MetricViews()
+	view.Unregister(metricViews()...)
+	views := metricViews()
 	require.NoError(t, view.Register(views...))
 	defer view.Unregister(views...)
 
@@ -181,8 +182,8 @@ func TestTracesConsumerGroupHandler(t *testing.T) {
 }
 
 func TestTracesConsumerGroupHandler_session_done(t *testing.T) {
-	view.Unregister(MetricViews()...)
-	views := MetricViews()
+	view.Unregister(metricViews()...)
+	views := metricViews()
 	require.NoError(t, view.Register(views...))
 	defer view.Unregister(views...)
 
@@ -316,7 +317,7 @@ func TestNewMetricsReceiver_encoding_err(t *testing.T) {
 func TestNewMetricsExporter_err_auth_type(t *testing.T) {
 	c := Config{
 		ProtocolVersion: "2.0.0",
-		Authentication: kafkaexporter.Authentication{
+		Authentication: kafka.Authentication{
 			TLS: &configtls.TLSClientSetting{
 				TLSSetting: configtls.TLSSetting{
 					CAFile: "/doesnotexist",
@@ -392,8 +393,8 @@ func TestMetricsReceiver_error(t *testing.T) {
 }
 
 func TestMetricsConsumerGroupHandler(t *testing.T) {
-	view.Unregister(MetricViews()...)
-	views := MetricViews()
+	view.Unregister(metricViews()...)
+	views := metricViews()
 	require.NoError(t, view.Register(views...))
 	defer view.Unregister(views...)
 
@@ -442,8 +443,8 @@ func TestMetricsConsumerGroupHandler(t *testing.T) {
 }
 
 func TestMetricsConsumerGroupHandler_session_done(t *testing.T) {
-	view.Unregister(MetricViews()...)
-	views := MetricViews()
+	view.Unregister(metricViews()...)
+	views := metricViews()
 	require.NoError(t, view.Register(views...))
 	defer view.Unregister(views...)
 
@@ -575,7 +576,7 @@ func TestNewLogsReceiver_encoding_err(t *testing.T) {
 func TestNewLogsExporter_err_auth_type(t *testing.T) {
 	c := Config{
 		ProtocolVersion: "2.0.0",
-		Authentication: kafkaexporter.Authentication{
+		Authentication: kafka.Authentication{
 			TLS: &configtls.TLSClientSetting{
 				TLSSetting: configtls.TLSSetting{
 					CAFile: "/doesnotexist",
@@ -651,8 +652,8 @@ func TestLogsReceiver_error(t *testing.T) {
 }
 
 func TestLogsConsumerGroupHandler(t *testing.T) {
-	view.Unregister(MetricViews()...)
-	views := MetricViews()
+	view.Unregister(metricViews()...)
+	views := metricViews()
 	require.NoError(t, view.Register(views...))
 	defer view.Unregister(views...)
 
@@ -701,8 +702,8 @@ func TestLogsConsumerGroupHandler(t *testing.T) {
 }
 
 func TestLogsConsumerGroupHandler_session_done(t *testing.T) {
-	view.Unregister(MetricViews()...)
-	views := MetricViews()
+	view.Unregister(metricViews()...)
+	views := metricViews()
 	require.NoError(t, view.Register(views...))
 	defer view.Unregister(views...)
 

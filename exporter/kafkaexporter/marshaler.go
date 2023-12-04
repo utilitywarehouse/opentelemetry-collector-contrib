@@ -8,6 +8,8 @@ import (
 	"go.opentelemetry.io/collector/pdata/plog"
 	"go.opentelemetry.io/collector/pdata/pmetric"
 	"go.opentelemetry.io/collector/pdata/ptrace"
+
+	"github.com/open-telemetry/opentelemetry-collector-contrib/pkg/translator/zipkin/zipkinv2"
 )
 
 // TracesMarshaler marshals traces into Message array.
@@ -46,6 +48,8 @@ func tracesMarshalers() map[string]TracesMarshaler {
 	otlpPbByTraceId := newPdataTracesMarshalerByTraceId(&ptrace.ProtoMarshaler{}, defaultEncoding)
 	otlpJSON := newPdataTracesMarshaler(&ptrace.JSONMarshaler{}, "otlp_json")
 	otlpJsonByTraceId := newPdataTracesMarshalerByTraceId(&ptrace.JSONMarshaler{}, "otlp_json")
+	zipkinProto := newPdataTracesMarshaler(zipkinv2.NewProtobufTracesMarshaler(), "zipkin_proto")
+	zipkinJSON := newPdataTracesMarshaler(zipkinv2.NewJSONTracesMarshaler(), "zipkin_json")
 	jaegerProto := jaegerMarshaler{marshaler: jaegerProtoSpanMarshaler{}}
 	jaegerJSON := jaegerMarshaler{marshaler: newJaegerJSONMarshaler()}
 	return map[string]TracesMarshaler{
@@ -53,6 +57,8 @@ func tracesMarshalers() map[string]TracesMarshaler {
 		KeyOfTracerMarshaller(otlpPbByTraceId):   otlpPbByTraceId,
 		KeyOfTracerMarshaller(otlpJSON):          otlpJSON,
 		KeyOfTracerMarshaller(otlpJsonByTraceId): otlpJsonByTraceId,
+		KeyOfTracerMarshaller(zipkinJSON):        zipkinJSON,
+		KeyOfTracerMarshaller(zipkinProto):       zipkinProto,
 		KeyOfTracerMarshaller(jaegerProto):       jaegerProto,
 		KeyOfTracerMarshaller(jaegerJSON):        jaegerJSON,
 	}
